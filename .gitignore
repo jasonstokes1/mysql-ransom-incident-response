@@ -1,0 +1,15 @@
+# Raw evidence — never commit (contains full host inventories, event logs, PII-adjacent data)
+*.csv
+*.evtx
+*.cab
+*.zip
+Pre_Breach_MDE_Investigation_Package/
+Post_Breach_MDE_Investigation_Package/
+**/uploads/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
