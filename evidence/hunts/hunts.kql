@@ -1,0 +1,82 @@
+// ============================================================================
+// Incident IR-2026-0728-GNG940 — Microsoft Defender Advanced Hunting queries
+// Host: corp-gng-940  |  Workspace: LAW-Cyber-Range
+// Incident window (UTC): 2026-07-27T21:00:21Z .. 2026-07-28T21:50:51Z
+// Every query is scoped to the incident window for reproducibility and to
+// exclude the unrelated Jul-23 ransom wave (DATAID 2OB23) in the same workspace.
+// ============================================================================
+
+
+// --- [01] Scope confirmation: activity volume by hour --------------------- §2
+MySQLAudit_CL
+| where _ResourceId endswith "corp-gng-940"
+| where TimeGenerated between (datetime(2026-07-27T21:00:21Z) .. datetime(2026-07-28T21:50:51Z))
+| summarize events=count() by bin(TimeGenerated, 1h)
+
+
+// --- [02] Confirm no exfil: outbound destinations ------------------------- §3
+DeviceNetworkEvents
+| where DeviceName == "corp-gng-940"
+| where TimeGenerated between (datetime(2026-07-27T21:00:21Z) .. datetime(2026-07-28T21:50:51Z))
+| where ActionType in ("ConnectionSuccess","HttpConnectionInspected","SslConnectionInspected")
+| where RemoteIP !startswith "10." and isnotempty(RemoteUrl)
+| summarize count() by RemoteUrl, RemoteIP
+| sort by count_ desc
+
+
+// --- [03] mysqld egress specifically — expect loopback only --------------- §3
+DeviceNetworkEvents
+| where DeviceName == "corp-gng-940" and InitiatingProcessFileName == "mysqld.exe"
+| where TimeGenerated between (datetime(2026-07-27T21:00:21Z) .. datetime(2026-07-28T21:50:51Z))
+| where ActionType == "ConnectionSuccess"
+| project TimeGenerated, LocalIP, LocalPort, RemoteIP, RemotePort
+
+
+// --- [04] IOC sweep ------------------------------------------------------- §4
+MySQLAudit_CL
+| where TimeGenerated between (datetime(2026-07-27T21:00:21Z) .. datetime(2026-07-28T21:50:51Z))
+| where RawData has_any ("64.89.163.176","64.89.163.169","recover_your_data","bc1qa83x6l2","onionmail","27VGA")
+| project TimeGenerated, RawData
+| sort by TimeGenerated asc
+
+
+// --- [06] Destruction sequence -------------------------------------------- §5
+MySQLAudit_CL
+| where TimeGenerated between (datetime(2026-07-27T21:00:21Z) .. datetime(2026-07-28T21:50:51Z))
+| where RawData has_any ("DROP DATABASE","DROP TABLE","RESET MASTER","PURGE BINARY","SHUTDOWN")
+| where RawData !has "SHOW"
+| project TimeGenerated, RawData
+| sort by TimeGenerated asc
+
+
+// --- [10] 14:00Z-bin drill-down: identifies mysqld restart at 14:24:07Z --- §6
+MySQLAudit_CL
+| where _ResourceId endswith "corp-gng-940"
+| where TimeGenerated between (datetime(2026-07-28T14:00:00Z) .. datetime(2026-07-28T15:00:00Z))
+| project TimeGenerated, RawData
+| sort by TimeGenerated asc
+
+
+// --- [07] Confirm host not breached: successful logons by source ---------- §6
+// Expected: local/console and internal (10.x) rows only; NO "PUBLIC" row.
+DeviceLogonEvents
+| where DeviceName == "corp-gng-940" and ActionType == "LogonSuccess"
+| where TimeGenerated between (datetime(2026-07-27T21:00:21Z) .. datetime(2026-07-28T21:50:51Z))
+| extend Source = case(isempty(RemoteIP), "local/console",
+              RemoteIP startswith "10.", "internal (10.x)",
+              "PUBLIC")
+| summarize Logons=count(), Accounts=make_set(AccountName) by Source
+
+
+// --- [08] SQL-to-OS pivot check — expect zero rows ------------------------ §6
+DeviceProcessEvents
+| where DeviceName == "corp-gng-940" and InitiatingProcessFileName =~ "mysqld.exe"
+| where TimeGenerated between (datetime(2026-07-27T21:00:21Z) .. datetime(2026-07-28T21:50:51Z))
+
+
+// --- [09] Ransom-note INSERT retrieval ------------------------------------ §8
+MySQLAudit_CL
+| where TimeGenerated between (datetime(2026-07-27T21:00:21Z) .. datetime(2026-07-28T21:50:51Z))
+| where RawData has "RECOVER_YOUR_DATA" and RawData has "INSERT"
+| project TimeGenerated, RawData
+| sort by TimeGenerated asc
