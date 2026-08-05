@@ -3,7 +3,7 @@
 Each screenshot is a Microsoft Defender Advanced Hunting result (or MySQL Workbench view)
 captured during the investigation. The query for each is in [`../hunts/hunts.kql`](../hunts/hunts.kql).
 
-Upload these 10 files into this folder:
+The 10 screenshots in this folder:
 
 | Screenshot file | Report § | What it proves |
 |------|----------|----------------|
