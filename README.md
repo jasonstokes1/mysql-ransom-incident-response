@@ -33,8 +33,8 @@ An internet-exposed MySQL server was compromised **under 5 hours after exposure*
 |---|---|
 | 📄 **[Full report (PDF)](report/corp-gng-940_MySQL-Ransom_IR-and-DFIR_2026-07-28.pdf)** | Incident report + DFIR host analysis |
 | 🔍 **[DFIR host diff](dfir/MDE_package_diff.md)** | Pre/post package comparison, ATT&CK-mapped |
-| ⌨️ **[KQL hunts](evidence/hunts/hunts.kql)** | 9 reproducible Defender queries |
+| ⌨️ **[KQL hunts](evidence/hunts/hunts.kql)** | Reproducible Defender queries |
 | 🖼️ **[Screenshots](evidence/screenshots/)** | Query results, mapped to report sections |
-| 📋 **[Methodology & IOCs](docs/)** | How the case was built + indicator list |
+| 📋 **[Methodology](docs/METHODOLOGY.md)** & **[IOCs](docs/IOCs.md)** | How the case was built + indicator list |
 
 <sub>Lab / cyber-range exercise — no real victim; IOCs published as-is. Raw evidence (CSVs, host packages) excluded by design.</sub>
