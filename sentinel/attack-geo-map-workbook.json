@@ -4,7 +4,7 @@
     {
       "type": 1,
       "content": {
-        "json": "# 🌍 Inbound Attack Origins — Cyber Range\n\nGeolocates every external source that attempted **failed remote logons** against the cyber-range environment (public RDP / network brute force). Bubble **size & color** = failed-logon volume from that source. This is the internet-wide background of credential-attack traffic the range absorbs — the same class of activity that, against host **corp-gng-940**, produced incident **IR-2026-0728-GNG940**.\n\n> Enriched with the native `geo_info_from_ip_address()` function. Geo data (MaxMind GeoLite2) is approximate — read as regions, not pinpoints."
+        "json": "# Inbound Attack Origins — Cyber Range\n\nGeolocates every external source that attempted **failed remote logons** against the cyber-range environment (public RDP / network brute force). Bubble **size & color** = failed-logon volume from that source. This is the internet-wide background of credential-attack traffic the range absorbs — the same class of activity that, against host **corp-gng-940**, produced incident **IR-2026-0728-GNG940**.\n\n> Enriched with the native `geo_info_from_ip_address()` function. Geo data (MaxMind GeoLite2) is approximate — read as regions, not pinpoints."
       },
       "name": "header"
     },

@@ -31,10 +31,10 @@ An internet-exposed MySQL server was compromised **under 5 hours after exposure*
 
 | | |
 |---|---|
-| 📄 **[Full report (PDF)](https://github.com/jasonstokes1/mysql-ransom-incident-response/blob/main/report/Incident%20Report%20%E2%80%94%20Database%20Ransom%20_%20Destruction%20on%20corp-gng-940.pdf)** | Incident report + DFIR host analysis |
-| 🔍 **[DFIR host diff](dfir/MDE_package_diff.md)** | Pre/post package comparison, ATT&CK-mapped |
-| ⌨️ **[KQL hunts](evidence/hunts/hunts.kql)** | Reproducible Defender queries |
-| 🖼️ **[Screenshots](evidence/screenshots/)** | Query results, mapped to report sections |
-| 📋 **[Methodology](docs/METHODOLOGY.md)** & **[IOCs](docs/IOCs.md)** | How the case was built + indicator list |
+| **[Full report (PDF)](https://github.com/jasonstokes1/mysql-ransom-incident-response/blob/main/report/Incident%20Report%20%E2%80%94%20Database%20Ransom%20_%20Destruction%20on%20corp-gng-940.pdf)** | Incident report + DFIR host analysis |
+| **[DFIR host diff](dfir/MDE_package_diff.md)** | Pre/post package comparison, ATT&CK-mapped |
+| **[KQL hunts](evidence/hunts/hunts.kql)** | Reproducible Defender queries |
+| **[Screenshots](evidence/screenshots/)** | Query results, mapped to report sections |
+| **[Methodology](docs/METHODOLOGY.md)** & **[IOCs](docs/IOCs.md)** | How the case was built + indicator list |
 
 <sub>Lab / cyber-range exercise — no real victim; IOCs published as-is. Raw evidence (CSVs, host packages) excluded by design.</sub>
